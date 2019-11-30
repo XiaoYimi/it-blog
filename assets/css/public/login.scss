@@ -1,0 +1,24 @@
+.page-login {
+  .login-wrapper {
+    margin: 20px 0;
+    .el-form {
+      .el-form-item {
+        .error-info {
+          color: #ff4339;
+          visibility: hidden;
+        }
+        .error-info-active {
+          visibility: unset;
+        }
+      }
+      .error-info-box {
+        height: 24px;
+        line-height: 24px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .pc-input-box { width: 60%; }
+}

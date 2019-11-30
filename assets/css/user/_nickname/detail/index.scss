@@ -1,0 +1,107 @@
+.user-detail {
+  color: #666666;
+  .user { font-size: 20px; }
+  .block {
+    margin-bottom: 20px;
+    .block-title {
+      border-radius: 4px;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #f2fcff;
+    }
+    .block-item-group,
+    .block-item-user,
+    .block-item-contacts {
+      margin: 0;
+      padding: 0 20px;
+    }
+
+    .block-item-group {
+      height: 24px;
+      line-height: 24px;
+      a { 
+        color: #666666;
+        &:hover { color: #4ecff5; }
+      }
+    }
+    .block-item-user {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      height: 30px;
+      .key {
+        min-width: 36px;
+        text-align-last: justify;
+      }
+      .value {
+        color: #75dfff;
+      }
+    }
+    .block-item-contacts {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        height: 30px;
+        .key {
+          min-width: 36px;
+          text-align-last: justify;
+        }
+        .value {
+          color: #75dfff;
+        }
+      }
+    }
+  }
+}
+
+.user-detail-group {
+  .group {
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #f2fcff;
+  }
+  .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4px;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 28px;
+    color: #666666;
+    cursor: pointer;
+    .title { 
+      padding-right: 15px;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #666666;
+      &:hover { color: #4ecff5; }
+     }
+    .date {
+      font-size: 12px;
+      color: #999999;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .user-detail-group .item .date {
+    overflow: hidden;
+    width: 64px;
+    height: inherit;
+  }
+}

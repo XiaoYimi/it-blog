@@ -1,0 +1,30 @@
+.page-register {
+  .register-wrapper {
+    margin: 20px 0;
+    .el-form {
+      .el-form-item {
+        &:nth-last-child(2) {
+          padding-bottom: 30px;
+        }
+        .el-input {
+          .el-input-group__append {
+            border-color: #409EFF;
+            color: #ffffff;
+            background-color: #409EFF;
+            .btn-code {
+              span {
+                display: inline-block;
+                min-width: 70px !important;
+              }
+            }
+          }
+        }
+        .code-msg { color: #4ecff5; }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .pc-input-box { width: 60%; }
+}

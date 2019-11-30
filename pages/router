@@ -1,0 +1,140 @@
+pages
+  register.vue (注册)  +
+  login.vue (登录)  +
+  about.vue (关于)  +
+  search.vue (搜索)  +
+  exit.vue (退出)  +
+
+  articles.vue (博文) +
+  qas.vue (博问)
+
+  /index.vue 首页
+  /articles.vue 博文
+  /qas.vue 博问
+  /about.vue 关于 IT 博
+  /login.vue 登录
+  /register.vue 注册
+  /search.vue 搜索
+
+  (每次进入页面都要获取用户信息验证,存在可进入,不存在返回404)
+  /user/_nickename/index.vue (个人信息)
+  /user/_nickename/publish/article/_articleid.vue (博文发布,存在 articleid 即博文编辑页)
+  /user/_nickename/publish/qa/index.vue (博问发布)
+  /user/_nickename/articles/index.vue (博主的所有博问)
+  /user/_nickename/qas/index.vue (博主的所有问答)
+
+  /user/_nickename/articles/detail/_articleid/index.vue (博文详情)
+  /user/_nickename/qas/detail/_qaid/index.vue (问答详情)
+
+
+articles: {
+  username: '',
+  articleid: 1,
+  title: '',
+  content: '',
+  date: '',
+  reading: 0,
+}
+
+acomments: {
+  username: '',
+  articleid: 1,
+  acommentid: 1
+  content: '',
+  date: ''
+}
+
+ainteractives: {
+  username,
+  articleid: 1,
+  acommentid: 1,
+  interactiveid: 1,
+  usernamea: '',
+  content: '',
+  usernameb: ''
+  date: ''
+}
+
+user: {
+  username: ''
+  email: ''
+  password: ''
+  occupation: ''
+  joindate: Date
+  city: ''
+  hobby: []
+}
+
+contacts: {
+  username: ''
+  qq: ''
+  wechat: ''
+  email: ''
+  phone: ''
+  weibo: ''
+}
+
+user: {
+  username: '',
+  occupation: '',
+  password: '',
+  email: ''
+  articles: [
+    {
+      id: 1,
+      title: '',
+      content: '',
+      date: '',
+      reading: 0,
+      comments: [
+        {
+          commentid: 1
+          username: '',
+          content: '',
+          date: ''
+          acomments: [
+            {
+              username: '',
+              articleid: 1,
+              acommentid: 1
+              content: '',
+              date: ''
+              interactives: [
+                {
+                  username,
+                  articleid: 1,
+                  acommentid: 1,
+                  interactiveid: 1,
+                  usernamea: '',
+                  content: '',
+                  usernameb: ''
+                  date: ''
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  qas: [
+    {
+      id: 1,
+      title: '',
+      content: '',
+      date: '',
+      reading: 0,
+      comments: [
+        {
+          username: '',
+          content: '',
+          date: ''
+        }
+      ]
+    }
+  ]
+
+}
+
+
+

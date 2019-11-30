@@ -1,0 +1,35 @@
+.page-about {
+  .about-wrapper {
+    .abouts {
+      margin: 0 0 30px;
+      color: #999999;
+      .abouts-title {
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      .abouts-blog-wrapper {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        .abouts-blog-item {
+          padding: 4px 4px 8px;
+          .info-title {
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #777777;
+          }
+          .info-item-wrapper {
+            list-style: none;
+            padding: 0;
+            .info-item {
+              margin-bottom: 12px;
+              padding-left: 0.5em;
+              line-height: 20px;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

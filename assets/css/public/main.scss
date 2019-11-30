@@ -1,0 +1,26 @@
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font: 12px/1.5 Microsoft YaHei,Heiti SC,tahoma,arial,Hiragino Sans GB,"\5B8B\4F53",sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.layout {
+  margin: 0 auto;
+  max-width: 1020px;
+  box-shadow: 0 0 12px #9e9e9e;
+  .el-aside { padding: 20px; }
+}
+
+.layout-blank {
+  max-width: unset;
+  box-shadow: unset;
+}
+

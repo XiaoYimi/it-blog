@@ -1,0 +1,84 @@
+.layout-aside {
+  display: block; 
+  border-right: 1px solid #eeeeee;
+  width: 240px !important;
+}
+
+.el-tooltip__popper.is-dark {
+  border: 1px solid #eeeeee;
+  background-color: #ffffff;
+  color: #4ecff5;
+  .popper__arrow {
+    border-bottom-color: #eeeeee;
+    &::after { border-bottom-color: #ffffff; }
+  }
+}
+
+.blog-aside {
+  .blog-type-wrapper,
+  .blog-user-wrapper,
+  .blog-contact-wrapper {
+    margin-bottom: 8px;
+    .blog-type-title,
+    .blog-user-name,
+    .blog-contact-title {
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #72767b;
+    }
+    .blog-type-item {
+      margin: 0;
+      padding: 0 0 0 12px;
+      height: 26px;
+      a {
+        font-size: 12px;
+        color: #999999;
+        cursor: pointer;
+        &:hover {color: #4ecff5; }
+      }
+    }
+    .blog-user-info {
+      margin: 0;
+      padding: 0 0 0 12px;
+      height: 26px;
+      font-size: 12px;
+      color: #999999;
+    }
+    .contact-info {
+      &::after {
+        display: block;
+        height: 0;
+        content: '';
+        clear: both;
+        visibility: hidden;
+      }
+      .blog-contact-item {
+        float: left;
+        margin: 0;
+        padding: 0 4px;
+        span {
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          background-image: url(https://fast.qifeiye.com/FeiEditor/images/icon/social_icon_24x24.png);
+          background-position-y: -48px;
+          cursor: pointer;
+        }
+        .blog-contact-wechat { background-position-x: 0; }
+        .blog-contact-weibo { background-position-x: -24px; }
+        .blog-contact-qq { background-position-x: -48px; }
+        .blog-contact-phone { background-position-x: -528px; }
+        .blog-contact-email { background-position-x: -480px; }
+      }
+    }
+  }
+}
+
+
+
+
+@media screen and (max-width: 1199px) {
+  .layout-aside {
+    display: none !important;
+  }
+}

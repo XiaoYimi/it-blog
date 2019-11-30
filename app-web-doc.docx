@@ -1,0 +1,764 @@
+app-web 开发流程
+
+root 指代项目根目录
+
+1. 基本安装 (因本人在以下环境配置开发)
+  node 8.12.0
+  npm 6.4.1
+  webpack 4.19.1
+  vue 2.5.17
+  nuxt 2.0.0
+
+  知识点: 模块支持
+
+2. 创建项目
+  命令:
+    npx create-nuxt-app project-name
+
+  安装选项:
+    UI Freamework => Element、Bootstrap
+    Server Freamework => koa
+    Rendering Mode => Universal
+    Linting Tools => ESLint
+    Nuxt Modules => Axios
+    Package Manageer => Npm
+
+  知识点: 命令交互式创建项目
+
+3. 启动项目
+  进入项目根目录:
+    cd <project-name>
+  
+  在项目根目录下执行启动:
+    npm run dev
+
+4. 了解项目目录结构
+  .nuxt             =>    打包编译所需的基本配置文件(非精通人员不可改动)。
+  assets            =>    资源目录(未编译,如 css/scss/less/js/image...)。
+  components        =>    用于组件存放的目录位置。
+  layouts           =>    用于页面模板存放的目录位置。
+  middleware        =>    用于定义中间件存放的目录位置。
+  pages             =>    用于页面存放的目录位置(根据页面层级关系,自动生成路由配置,无须开发人员配置路由)。
+  plugins           =>    用于(vue 实例创建之前需要运行的)插件存放的目录位置。
+  server            =>    用于存放数据库或定义可访问后台数据的接口,以及后台配置文件的目录位置 (后台人员编辑)。
+  static            =>    用于存放静态资源的目录位置(y一般只存放页面标题前的logo)。
+  store             =>    用于定义状态管理的目录位置(创建 store 目录即配置状态管理模式,无需安装 VUex)。
+  .babelrc          =>    用于 es6 语法转 es5 的配置文件。
+  nuxt.config.js    =>    用于 nuxt 的个性化配置,会覆盖默认配置。
+  package.json      =>    用于应用的依赖关系和对外暴露的脚本接口。
+  README.md         =>    用于描述当前项目的功能介绍，使用方法等等。
+
+  知识点: nuxt 框架目录结构
+
+5. 特别声明
+  无需开发人员配置路由, nuxt 会自动根据目录 pages 下的文件目录层级关系自动生成路由配置。
+
+  基础路由:
+    假设目录 pages 下的目录/文件定义:
+      root
+      --| pages
+      ----| index.vue
+      ----| about.vue
+      ----| user
+      ------| index.vue
+
+    那么, nuxt 将会根据目录 pages 的层级关系自动生成路由配置, 如下:
+      router = {
+        routes: [{
+          name: 'index',
+          path: '/',
+          component: 'pages/index.vue'
+        }, {
+          name: 'about',
+          path: '/about',
+          component: 'pages/about.vue'
+        },{
+          name: 'user-index',
+          path: '/user/index',
+          component: 'pages/user/index.vue'
+        }]
+      }
+
+
+  动态路由:
+    特别声明: nuxt 在定义带参数的动态路由时, 是以 '_' 为前缀定义文件或目录。
+      文件形式: _param.vue
+      目录形式: _param/index.vue
+
+    假设需求是 http://xxx.com/user/userid, 其中可通过参数 userid 访问到不同用户的页面。
+
+    那么在目录 pages 应这样定义 (2 种方法):
+      方法1: pages 目录结构如下
+        root
+        --| pages
+        ----| user
+        ------| _userid.vue
+
+      方法2: pages 目录结构如下
+        root
+        --| pages
+        ----| user
+        ------| _userid
+        --------| index.vue
+        
+
+  动态嵌套路由:
+    特别声明: nuxt 在定义带参数的动态路由时, 是以 '_' 为前缀定义文件或目录。
+      文件形式: _param.vue
+      目录形式: _param/index.vue
+
+    假设需求是 http://xxx.com/user/userid/articles/articleid, 其中可通过参数 userid、 articleid 访问到不同用户下的某篇文章。
+
+    那么在目录 pages 应这样定义 (2 种方法):
+      方法1: pages 目录结构如下
+        root 
+        --| pages
+        ----|user
+        ------| _userid
+        --------| index.vue
+        --------| articles
+        ----------| _articleid.vue
+
+      方法2: pages 目录结构如下
+        root 
+        --| pages
+        ----|user
+        ------| _userid
+        --------| index.vue
+        --------| articles
+        ----------| _articleid
+        ------------| index.vue
+
+
+  无需安装 Vuex 模块, 因为 nuxt 本身内置有 Vuex, 只需要在项目根目录下创建目录 store 和出口文件 index.js 即可。
+
+  知识点: 对 nuxt 框架路由的理解和以目录文件定义页面路由
+
+
+6. 因为有些页面的 html 骨架基本一致，所以可对页面进行定制模板(layout)。在目录 layouts 下创建 .vue 文件定制模板。
+  常见模板骨架结构,大致有这几种:
+    1. 上-中-下
+    2. 上-左中(侧边)-右中(正文)-下
+    3. 空白
+    4. 分屏(左-右)
+
+  使用模板: 在页面 export default {
+    layout: 'root/layout/模板名(记得省略.js)'
+  }
+
+  知识点: 理解常用模板骨架结构和使用模板
+
+
+7. (在页面文件)对页面标题的设置
+  export default {
+    head () { return { title: '页面标题' } }
+  }
+
+  知识点: nuxt 框架下更改页面标题
+
+8. 对 axios 进行配置, 并导出实例
+
+  1. 在创建项目过程中, 有一个交互环节是 Axios(), 前面已经让开发者选择 yes;
+    它的作用是在页面发出请求需要用到的 axios, 在 content 对象或 Vue 实例可访问。
+    那么在配置时，应在文件 root/nuxt.config.js 中, 对字段 modules 进行配置:
+    
+    未配置前:
+      module.exports = {
+        mode: 'universal',
+        css: [],
+        modules: [],
+        ...
+      }
+
+    配置后:
+      module.exports = {
+        mode: 'universal',
+        css: [],
+        modules: [ '@nuxtjs/axios' ],
+        ...
+      }
+      
+
+  2. 安装 axios 模块,配置并进行封装成实例
+    npm install axios
+
+    axios 模块安装后, 需在文件 root/nuxt.config.js 中, 对 module.exports 对象添加字段 axios: {}
+
+    未配置前:
+      module.exports = {
+        mode: 'universal',
+        css: [],
+        modules: [ '@nuxtjs/axios' ],
+        ...
+      }
+
+    配置后:
+      module.exports = {
+        mode: 'universal',
+        css: [],
+        modules: [ '@nuxtjs/axios' ],
+        ...
+        axios: {}
+      }
+
+    然后在目录 root/server 下创建子目录 interface, 在子目录创建次级目录 utils, 用于存放开发者自我封装的函数工具目录
+    在目录 root/server/interface/utils 下创建文件 axios.js (用于后台进行请求访问),其内容为:
+
+    // root/server/interface/utils/axios.js
+      import axios from 'axios'
+
+      const instance = axios.create({
+        baseUrl: `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3000}`,
+        timeout: 10000,
+        header: {}
+      })
+
+      export default instance
+
+  知识点: 对 nuxt 框架下的 @nuxt/axios.js 进行配置,自行封装 axios 模块实例
+
+9. 配置公共样式
+  在目录 root/assets 下创建子级目录 css, 并在目录 root/assets/css 下创建 main.css,用于存放公共样式的文件
+
+  在文件 root/nuxt.config.js 对字段 css 添加公共样式路径
+
+  未配置前:
+    module.exports = {
+      mode: 'universal',
+      css: [],
+      modules: [ '@nuxtjs/axios' ],
+      ...
+      axios: {}
+    }
+
+  (由于我选用 UI Freamework 为 Element, 就此一同配置) 配置后:
+    module.exports = {
+      mode: 'universal',
+      css: [
+        'element-ui/lib/theme-chalk/reset.css',
+        'element-ui/lib/theme-chalk/index.css',
+        'element-ui/lib/theme-chalk/display.css',
+        '@/assets/css/public/main.scss'
+      ],
+      modules: [ '@nuxtjs/axios' ],
+      ...
+      axios: {}
+    }
+
+  知识点: nuxt 框架下配置公共样式
+    
+10. 配置数据库服务器, Redis 服务器，QQ邮箱 SMTP 服务，以及包模块配置
+  模块安装:
+    mongoose  用于数据库连接
+    koa-bodyparser  用于获取上传的数据
+    koa-redis  用于存储 验证、数据缓存、快速存储的数据
+    koa-generic-session  用于管理操作 session
+    koa-json  用于格式化 json 数据
+    koa-router 用于定义后台接口的访问模块
+
+  在目录 root/server 下创建子级目录 dbs, 并在目录 root/server/dbs 下分别创建配置文件 config.js 和子级目录 modules
+  文件 config.js 为对外出口的配置文件,目录 modules 为数据库模型目录位置,存放数据库模型文件(.js)
+
+    配置文件 root/server/dbs/config.js 内容如下:
+      127.0.0.1 为服务器的 IP 地址,可根据部署自行更改。
+      // root/server/dbs/config.js
+      export default {
+        dbs: 'mongodb://127.0.0.1:27017/数据库名',
+
+        redis: {
+          get host () { return '127.0.0.1' },
+          get port () { return 6379 }
+        }
+
+        stmp: {
+          get host () { return 'smtp.qq.com' /** 不得更改 */ },
+          get user () { return '2590856083@qq.com' /** 邮箱(发送方) */ },
+          get pass () { return 'zvubtgsjhvcreaba' /** 需前往 QQ Email Setting中获取一窜码, 邮箱发送需要的令牌 */ },
+          // 验证码生成
+          get code () { return () => {
+            return Math.random().toString().slice(2,6).toUpperCase()
+          }},
+          // 验证码有效时长 (1 minutes)
+          get expire () { return () => {
+            return new Date().getTime() + 60 * 1000
+          }}
+        }
+      }
+
+  在文件 root/server/index.js 进行包模块配置, 如下
+    import mongoose from 'mongoose' // 数据库存储
+    import bodyParser from 'koa-bodyparser' // 用于获取上传的数据
+    import Redis from 'koa-redis' // 用于存储 验证、数据缓存、快速存储的数据
+    import session from 'koa-generic-session' // 用于管理操作 session
+    import Json from 'koa-json' // 用于格式化 json 数据
+    import passport from './interface/utils/passport' // 用于(登录)自动验证
+
+    在函数 start() 内部的这串代码中间部分进行配置(位置别找错)
+    // 文件 root/server/index.js 
+    -----------------------------------------------------------------------------------
+    // Build in development
+    if (config.dev) {
+      const builder = new Builder(nuxt)
+      await builder.build()
+    } else {
+      await nuxt.ready()
+    }
+
+    /**
+    * 配置位置,全部都在这里编写
+    */
+
+    app.use((ctx) => {
+      ctx.status = 200
+      ctx.respond = false // Bypass Koa's built-in response handling
+      ctx.req.ctx = ctx // This might be useful later on, e.g. in nuxtServerInit or with nuxt-stash
+      nuxt.render(ctx.req, ctx.res)
+    })
+    -----------------------------------------------------------------------------------
+
+    // 启用 redis 服务，并配置 cookie 秘钥(session加密)和签名
+    app.keys = ['itblog', 'blog']
+    app.proxy = true
+    app.use(session({
+      key: 'itblog',
+      prefix: 'itblog:uid',
+      store: new Redis()
+    }))
+
+    特别声明：app.keys = [], 数组内部是什么，可由自己定义,2 项;
+    (我的项目为 ITBlog, 所以为 itblog, blog,貌似是为 session, cookie 加密解密方式;忘了)
+    当然，当你登录成功时,可前往浏览器控制台 application 下的 cookie 项，可以查看到存在 itblog, itblog.sig 这两项;
+    跟 app.use(session({ key: 'itblog', prefix: 'itblog:uid', store: new Redis() })) 有关就是了.
+
+
+    // 数据库连接，并开启自动登录验证 (由于 passport 暂时没写登录,就稍后再说)
+    mongoose.set('useCreateIndex', true)
+    mongoose.connect(dbConfig.dbs, {
+      useNewUrlParser: true
+    })
+    app.use(passport.initialize())
+    app.use(passport.session())
+
+
+    // 使用获取上传数据的中间件
+    app.use(bodyParser({
+      extendTypes: ['text', 'json', 'form']
+    }))
+
+
+    // 使用格式化化数据(中间件)
+    app.use(Json())
+
+  
+  知识点: 配置数据库服务器, Redis 服务器，QQ邮箱 SMTP 服务，以及包模块配置
+
+  到达这里，基本配置已经完成.
+
+
+11. 定义后台访问接口 (涉及数据库或redis，访问时必须开启服务-- mongodb 、redis )
+  在目录 root/server/interface 下创建文件 test.js (测试模块的接口)
+
+  文件 root/server/interface/test.js 内容如下:
+
+    // root/server/interface/test.js
+    import Router from 'koa-router'
+    // 其它模块请根据需求引入
+    // 通过 ctx.body 返回接口自定义数据
+
+    let router = new Router({ prefix: '接口访问的前缀(模块名)' })
+
+    // 编辑测试接口
+    router.get('/test', async (ctx) => {
+      ctx.body = {
+        code: 0,
+        msg: '访问成功'
+      }
+    })
+
+    export default router
+
+  将后台访问的数据接口挂载到后台服务中(root/server.index.js)
+  在文件 (root/server/index.js) 内部引入刚才编写的数据接口 (root/server/interface/test.js)
+  // root/server/index.js
+  import test from './interface/test.js'
+
+  在指定的配置位置下编辑一下代码,建议放在配置位置的最后部分
+  // 加载路由配置(模块接口)
+  app.use(test.routes()).use(test.allowedMethods())
+
+  检测是否成功: 在浏览器输入 http:localhost:3000/接口访问的前缀/test,页面是否出现
+  {
+    code: 0,
+    msg: '访问成功'
+  }
+
+  若出现,接口配置都没问题,可继续开发;若没有,应该是部分配置出现问题
+
+  知识点: 接口定义和接口测试
+
+12. 编写数据库模型
+  
+  -----------------------------------------------------------------------------------
+  在此先普及下数据库字段的一些属性,如下:
+    type      =>    字段的类型 (String, Number, Boolean, Object, Array, Symbol...)
+    require   =>    字段是否必传 (true / false)
+    unique    =>    字段唯一值 (true / false)
+    default   =>    字段默认值
+    
+  特别声明: 数据模型内部存储的日期为 ISO 日期(世界统一时间),故此在中国时区的开发者勿慌.
+  ------------------------------------------------------------------------------------
+  
+  好，那就继续开发...
+
+  在目录 root/server/dbs/modules 下创建文件 users.js, 用于存放用户的登录信息
+  在文件 root/server/dbs/modules/users.js 内部引入 mongoose 模块,通过 schema 定义数据模型, 再通过 export default mongoose.model('数据库名称(首字母大写)', 'schema 定义的模型') 导出即可;
+  
+  // root/server/dbs/modules/users.js
+  import mongoose from 'mongoose'
+
+  const UsersSchema = new mongoose.Schema({
+    // 用户名(用于需求是用户名是惟一的,故此采用 unique: true)
+    nickname: {
+      type: String,
+      unique: true,
+      require: true
+    },
+    // 密码
+    pass: {
+      type: String,
+      require: true,
+      default: '123456' // 防止前端的小伙伴没有判断不能为空,故默认为 '123456'
+    },
+    .... (更多需要的字段自行定义)
+  })
+
+  export default mongoose.model('Users', UsersSchema)
+
+  知识点: 数据库模型的创建
+
+  这样,数据模型已经完成; 是不是有点意外的简单~~
+
+13. 重新定义一个正式的接口,之前的接口 test 是测试用的;
+
+  接下来,我们要在接口上对数据库进行操作;由于涉及的内容比较多，大家小心跟着，别断片哦
+
+  特别声明: 不同传参方式(get, post),获取的方式也不一样
+    get   =>  ctx.query (单独获取: ctx.query.传参字段)
+    post  =>  ctx.request.body (单独获取: ctx.request.body.传参字段)
+
+  我们重新创建一个接口文件 users (root/server/interface/users.js), 文件内容如下:
+  ------------------------------------------------------------------------------------------------
+    import Router from 'koa-router'     // 接口必要的路由模块
+    import Redis from 'koa-redis'       // 进行操作存储 redis 数据,比如验证码信息等.
+    import axios from './utils/axios'   // 自行封装的 axios 实例,用于后台进行请求访问,主要作用是注册成功,在后台自我验证是否通过
+    import passport from './utils/passport'   // 用于(登录)自我验证 (这个待会儿再说)
+    import nodeMailer from 'nodemailer'   // 邮箱模块,发送邮箱验证码必要的模块
+    import dbConfig from '../dbs/config'  // 数据库, redis. QQ邮箱配置
+    import UserModel from '../dbs/models/users'   // 数据库模型 users
+
+    // 定义接口路由
+    let router = new Router({ prefix: '/users' })  // users 模块接口
+
+    // 访问用户信息
+    router.get('/userinfo', async (ctx) => {
+
+    })
+
+    // 发送验证码
+    router.post('/verify', async (ctx) => {
+
+    })
+
+    // 用户注册
+    router.post('/signup', async (ctx) => {
+
+    })
+
+    // 用户登录
+    router.post('/signin', async (ctx) => {
+
+    })
+
+    // 用户退出
+    router.get('/exit', async (ctx) => {
+
+    })
+
+    // 用户注销
+    router.post('/cancellation', async (ctx) => {
+
+    })
+
+    export default router
+
+    --------------------------------------------------------------------------
+
+  知识点: nuxt 框架下对参数的方式,常用接口,以及包模块作用的理解
+
+  不管在任何商用网站,用户方面都有这些接口.
+
+14. 编写 QQ 邮箱服务,获取验证码接口
+  在接口文件 root/server/interface/users.js 的路由函数 router.post('/verify') 的内部进行编辑,如下:
+---------------------------------------------------------------------------------------------
+  //  root/server/interface/users.js
+    // 获取用户邮箱(接收方)
+    const nickname = ctx.request.body.nickname
+
+    // 获取 resis 保存的 expire (有效时长)
+    const saveExpire = await Store.hget(`nodemail:${nickname}`, 'expire')
+
+    // 检测是否频繁获取验证码
+    if (saveExpire && new Date().getTime() - saveExpire < 0) {
+      ctx.body = {
+        code: -1,
+        msg: '验证码获取过于频繁,1 分钟 1 次'
+      }
+      return
+    }
+
+    // 定义邮件发送方信息
+    let transpoter = nodeMailer.createTransport({
+      service: 'qq', // 必须是 小写 qq
+      auth: {
+        user: dbConfig.smtp.user,
+        pass: dbConfig.smtp.pass
+      }
+    })
+
+    // 定义邮件接收方信息
+    let receiver = {
+      code: dbConfig.smtp.code(),
+      expire: dbConfig.smtp.expire(),
+      email: ctx.request.body.signup,
+      user: ctx.request.body.nickname
+    }
+
+    // 进行邮箱服务配置
+    let mailOptions = {
+      from: `"认证邮件" <${dbConfig.smtp.user}>`,  // 邮件发送者
+      to: receiver.email,                         // 邮件接收者
+      subject: '《IT 博官网》注册码',              // 邮件标题
+      html: `您正在 IT 博官网注册,注册码：${receiver.code}`    // 邮件内容
+    }
+
+    // 实现注册码邮件发送
+    await transpoter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error)
+      } else {
+        // 验证码发送成功，并保存该信息，以便验证使用
+        Store.hmset(`nodemail:${receiver.user}`, 'code', receiver.code, 'expire', receiver.expire, 'email', receiver.email)
+      }
+    })
+
+    ctx.body = {
+      code: 0,
+      msg: '验证码已发送，可能因网络会有所延迟'
+    }
+
+  特别说明: 
+    在发送邮件之前，请务必通过 QQ 邮箱开启 smtp 服务,详情见百度,自己搜一下吧
+    当发送成功,邮件接收方会收到该邮件;如未发送成功,则需检查文件 root/server/dbs/index.js 中 smtp 服务是否配置成功.
+
+  知识点: 开启 QQ 邮箱 (smtp) 服务,编辑验证码获取接口
+
+--------------------------------------------------------------------------------------------
+
+
+15. 编辑注册接口
+  在接口文件 root/server/interface/users.js 的路由函数 router.post('/signup') 的内部进行编辑,如下:
+  -----------------------------------------------------------------------------------------
+  // 获取客户端用户表单信息
+  const { signup, nickname, pass, occupation, code } = ctx.request.body  // 采用 post 方式, signup 为邮箱
+
+  // 校正验证码输入是否正确
+  if (code) {
+    // 获取 redis 存储的验证码和时长
+    const saveCode = await Store.hget(`nodemail:${nickname}`, 'code')
+    const saveExpire = await Store.hget(`nodemail:${nickname}`, 'expire')
+
+    // 验证码判断
+    if (saveCode === code) {
+      if (new Date().getTime() - saveExpire > 0) {
+        ctx.body = {
+          code: -1,
+          msg: '验证码已过期，请重新发送'
+        }
+        return false
+      }
+    } else {
+      ctx.body = {
+        code: -1,
+        msg: '请填写正确验证码'
+      }
+      return false
+    }
+  } else {
+    ctx.body = {
+      code: -1,
+      msg: '请输入验证码'
+    }
+    return false
+  }
+
+  // 数据库查找该用户是否存在，存在则提示已被注册，不存在则写入库
+  let user = await UserModel.find({ nickname })  // 此处 UserModel 是 import 引入进来的(数据库模型 users),可往回看来源
+  // 存在记录，则已被注册
+  if (user.length) {
+    ctx.body = {
+      code: -1,
+      msg: '该用户名已被注册'
+    }
+    return false
+  }
+
+  // 写入数据库
+  let nuser = await UserModel.create({ nickname, signup, pass, occupation })
+
+  // 通过数据库返回结果判断是否注册状态  
+  if (nuser) {
+    let res = await axios.post('/users/signin', { nickname, pass }) // 写入数据库后，自我验证
+    if (res.data && res.data.code === 0) {
+      ctx.body = {
+        code: 0,
+        msg: '注册成功'
+      }
+    } else {
+      ctx.body = {
+        code: -1,
+        msg: 'mongodb error'
+      }
+    }
+  } else {
+    ctx.body = {
+      code: -1,
+      msg: '注册失败'
+    }
+  }
+
+  特别说明: 强烈建议在校正信息正确后,对数据库模型操作写入数据库后，必须进行自我验证(防止写库失败)
+
+  知识点: 对数据库模型的操作,以及对注册过程的理解
+
+---------------------------------------------------------------------------------------------------
+
+
+15. 编辑登录接口
+  在接口文件 root/server/interface/users.js 的路由函数 router.post('/signin') 的内部进行编辑,如下:
+----------------------------------------------------------------------------------------------------
+  // 返回一个 passport.authenticate 方法的处理结果
+  return passport.authenticate('local', (error, user, info, status) => {
+    if (error) {
+      ctx.body = {
+        code: -1,
+        msg: error
+      }
+    } else {
+      if (user) {
+        const token = Math.random().toString().slice(2,10) + ['a', 'b', 'c', 'd'][Math.floor(Math.random() * 4)]
+        ctx.body = {
+          code: 0,
+          msg: '登录成功',
+          user,
+          limitNumber: token
+        }
+        return ctx.login(user)
+      } else {
+        ctx.body = {
+          code: -1,
+          msg: info
+        }
+      }
+    }
+  })(ctx, next)  // 参数这里必填,否则程序不完整
+
+
+  // 封装 passport
+  在项目根目录下安装模块 koa-passport passport-local
+
+  在目录 root/server/interface/utils 下创建文件 passport.js, 内容如下:
+    import passport from 'koa-passport'
+    import LocalStrategy from 'passport-local'
+    import UsersModel from '../../dbs/models/users'
+
+    // 使用本地策略,实现自动验证
+    passport.use(new LocalStrategy({
+      usernameField: 'nickname',
+      passwordField: 'pass'
+    }, async (username, password, done) => {
+      let res = await UsersModel.findOne({ nickname: username })  // 在数据库查找记录
+      if (res != null) {
+        return res.pass === password ? done(null, res) : done(null, false, '密码错误')
+      } else {
+        return done(null, false, '用户不存在')
+      }
+    }))
+
+
+    // 每次进入页面、需要进行序列化，通过 session 自动验证
+    // 将用户登录状态存储在 session 中，实现 http 有状态管理
+    // ctx.login 时触发
+    passport.serializeUser((user, done) => {
+      done(null, user)
+    })
+
+    passport.deserializeUser((user, done) => {
+      done(null, user)
+    })
+
+    export default passport
+
+
+  特别说明: 
+    passport 是采用本地策略,进行自我登录验证;
+    本质上算是对登录验证的封装,仅需要提供用户名和密码,让它在数据库进行查找;
+    在每次进行页面访问的时候,passport 都会进行序列化处理,通过 session 进行验证登录状态,实现 http 有状态管理
+
+  知识点:
+    通过使用本地策略进行识别用户身份,使得 http 无状态到 http 有状态(登录身份)的实现
+    理解 passport 机制和原理
+
+
+----------------------------------------------------------------------------------------------------
+
+16. nuxt 路由鉴权
+
+  自个儿写的不是太理想，就不展示;就给以下思路
+
+  官方使用 express-session 解决这个问题; 
+  如果是其它后台语言,将获取的 token 保存在 cookie 中,再报数据返回给前端;前端人员通过将 token 保存在 Vuex 中
+
+  如果不大明白,具体详见 https://www.cnblogs.com/zhangshuda/p/8241692.html, 这是目前看过最好理解的博文了
+
+  知识点: nuxt 框架下的路由鉴权
+
+
+17. nuxt 生命周期 (自上而下)
+  client: request           =>    客户端发送请求
+  server: serverInit        =>    将服务端数据传入给客户端(一般是用户登录信息) 
+  server: middleware        =>    中间件的处理
+  server: validate          =>    对页面路由验证的
+  server: asyncData         =>    获取页面组件所需要的数据
+  server: fetch             =>    获取状态树数据(所用组件共享的数据)
+  server: render            =>    在服务器端进行渲染页面
+  return generatePage       =>    返回一个静态页面
+  client: response          =>    客户端响应获得页面
+
+  知识点: 对 nuxt 框架的生命周期的理解
+
+18. nuxt 周期下的 serverInit, fetch, asyncData 的区别 (SSR 渲染)
+  serverInit: 
+    在状态树指定 serverInit 方法, 第一个参数为 store, 第二个参数为 context;
+    可以通过 context 的属性 req.session.user 访问当前用户登录的信息
+  
+  fetch:
+    是页面在服务端渲染过程中获取状态树信息,并返回给页面
+
+  asyncData:
+    是页面在服务端渲染过程中获取页面的必要数据信息,并返回给页面
+
+  知识点: 对周期函数的作用理解
+
+  
+
+

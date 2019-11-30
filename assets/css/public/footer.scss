@@ -1,0 +1,25 @@
+
+.el-footer {
+  border-top: 1px solid #eeeeee;
+  padding: 20px;
+  height: unset !important;
+}
+
+.blog-footer {
+  display: block;
+  text-align: center;
+  color: #999999;
+  a {
+    color: #999999;
+    &:hover { color: #4ecff5; }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .blog-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}

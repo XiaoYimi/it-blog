@@ -1,0 +1,25 @@
+.notice-rules-wrapper {
+  h3 {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  .notice-rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    .notice-rules-item {
+      padding-bottom: 6px;
+      color: #999999;
+      .title {
+        margin-bottom: 2px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .rules {
+        padding-left: 0.5em;
+        font-size: 12px;
+        b { color: #ff4339; }
+      }
+    }
+  }
+}
