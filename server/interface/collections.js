@@ -126,7 +126,7 @@ router.post('/delete', async (ctx) => {
 // 用户收藏列表
 router.get('/all', async (ctx) => {
   const find = await CollectionModel.findOne({ nickname: ctx.query.nickname }, { _id: 0, list: 1 })
-  const collections = find.list
+  const collections = find ? find.list : []
   ctx.body = {
     code: 0,
     msg: 'request ok',
