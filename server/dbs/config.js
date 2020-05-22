@@ -1,4 +1,4 @@
-export default {
+﻿export default {
   // 数据库地址
   dbs: 'mongodb://127.0.0.1:27017/blog',
 
@@ -12,7 +12,7 @@ export default {
   smtp: {
     get host () { return 'smtp.qq.com' /** 不得更改 */ },
     get user () { return '2590856083@qq.com' /** 邮箱(发送方) */ },
-    get pass () { return 'zvuducscndcreaba' /** 邮箱发送需要的令牌 */ },
+    get pass () { return '<pass_code>' /** 邮箱发送需要的令牌 */ },
 
     // 验证码生成
     get code () { return () => {
